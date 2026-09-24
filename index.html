@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Krafter's | 3D Fast Food & Beverages</title>
+  <meta name="description" content="Code Krafter's - Crafting Delicious Bytes & Bites. Interactive 3D fast food ordering with juicy burgers, crispy fried chicken, craft pizzas, shakes and combos!">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍔</text></svg>">
+  
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Ambient 3D Glow Orbs & Background Canvas -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Announcement Bar -->
+  <aside class="top-announcement" aria-label="Offers & Deals">
+    <div class="announcement-content">
+      <span>⚡ FLASH DEAL: Use code <strong>KRAFTER50</strong> for 50% OFF up to ₹150!</span>
+      <span class="dot">•</span>
+      <span>🛵 FREE Lightning Delivery on orders above ₹499!</span>
+      <span class="dot">•</span>
+      <span>⭐ 100% Fresh Ingredients Crafted Daily</span>
+    </div>
+  </aside>
+
+  <!-- Sticky Navbar -->
+  <header class="main-header" id="navbar">
+    <div class="nav-container">
+      <!-- Brand Logo (Refreshes Page on Click) -->
+      <a href="javascript:void(0)" onclick="window.location.reload()" class="brand-logo" aria-label="Code Krafter's Home - Reload Page">
+        <div class="logo-icon-3d">
+          <span class="emoji-logo">🍔</span>
+          <div class="glow-ring"></div>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Code Krafter's</span>
+          <span class="brand-tagline">Bytes &amp; Bites</span>
+        </div>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="nav-search-bar">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="menu-search-input" placeholder="Search burgers, chicken, pizzas, shakes..." autocomplete="off">
+        <button id="search-clear-btn" class="clear-search-btn hidden" aria-label="Clear Search">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="nav-actions">
+        <!-- Dark / Light Mode Toggle Button -->
+        <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Dark / Light Mode" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon" id="theme-icon"></i>
+        </button>
+
+        <!-- Sound Effect Toggle -->
+        <button id="sound-toggle-btn" class="nav-icon-btn" title="Toggle Sound Effects" aria-label="Toggle Sound Effects">
+          <i class="fa-solid fa-volume-high" id="sound-icon"></i>
+        </button>
+
+        <!-- Veg Only Filter Toggle -->
+        <label class="veg-toggle-wrap" title="Toggle 100% Vegetarian items">
+          <input type="checkbox" id="veg-filter-checkbox">
+          <span class="veg-slider">
+            <span class="veg-dot"></span>
+          </span>
+          <span class="veg-label"><span class="veg-badge-icon">🟢</span> Veg Only</span>
+        </label>
+
+        <!-- Cart Trigger Button -->
+        <button id="cart-toggle-btn" class="cart-btn" aria-label="View Shopping Cart">
+          <div class="cart-icon-wrap">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span class="cart-badge-count" id="nav-cart-count">0</span>
+          </div>
+          <div class="cart-btn-price" id="nav-cart-price">₹0</div>
+        </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobile-menu-btn" class="mobile-menu-toggle" aria-label="Open Navigation Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Dropdown Navigation -->
+  <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+    <div class="mobile-search-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="mobile-search-input" placeholder="Search food items...">
+    </div>
+    <div class="mobile-theme-row">
+      <span>Theme (Dark / Light)</span>
+      <button id="mobile-theme-toggle" class="btn btn-secondary mobile-theme-btn">
+        <i class="fa-solid fa-moon"></i> Toggle Theme
+      </button>
+    </div>
+    <div class="mobile-veg-filter">
+      <span>100% Vegetarian Filter</span>
+      <label class="veg-toggle-wrap">
+        <input type="checkbox" id="mobile-veg-checkbox">
+        <span class="veg-slider"><span class="veg-dot"></span></span>
+      </label>
+    </div>
+    <nav class="mobile-category-links" id="mobile-category-links">
+      <!-- Injected dynamically -->
+    </nav>
+  </div>
+
+  <main>
+    <!-- HERO SECTION WITH INTERACTIVE 3D BURGER -->
+    <section class="hero-section" id="home">
+      <div class="hero-container">
+        <!-- Hero Text & CTA Column -->
+        <div class="hero-text-col">
+          <div class="hero-badge">
+            <span class="badge-fire">🔥</span>
+            <span>NEXT-GEN FAST FOOD EXPERIENCE</span>
+          </div>
+          
+          <h1 class="hero-title">
+            Crafting <span class="highlight-orange">Delicious Bytes</span>, 
+            Serving <span class="highlight-red">Legendary Bites</span>
+          </h1>
+
+          <p class="hero-description">
+            Welcome to <strong>Code Krafter's</strong>! Dive into our double-stacked smash burgers, 
+            14-spice crispy fried chicken, cheese-loaded crusted pan pizzas, and handcrafted thickshakes. 
+            Freshly prepared, lightning fast!
+          </p>
+
+          <!-- Hero Metrics -->
+          <div class="hero-metrics">
+            <div class="metric-card">
+              <span class="metric-num">⚡ 25 min</span>
+              <span class="metric-label">Superfast Delivery</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-num">⭐ 4.9 / 5</span>
+              <span class="metric-label">25k+ Happy Krafters</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-num">🍗 100%</span>
+              <span class="metric-label">Fresh &amp; Halal Quality</span>
+            </div>
+          </div>
+
+          <!-- Hero Action Buttons -->
+          <div class="hero-cta-group">
+            <a href="#menu-section" class="btn btn-primary btn-glow" id="hero-order-now-btn">
+              <span>Order Now</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <button class="btn btn-secondary" id="hero-view-combos-btn">
+              <i class="fa-solid fa-box-open"></i>
+              <span>Value Combos</span>
+            </button>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="hero-trust-strip">
+            <div class="trust-item"><i class="fa-solid fa-shield-halved"></i> Hygienic Kitchens</div>
+            <div class="trust-item"><i class="fa-solid fa-tag"></i> Best Price Guarantee</div>
+            <div class="trust-item"><i class="fa-solid fa-credit-card"></i> UPI &amp; COD Accepted</div>
+          </div>
+        </div>
+
+        <!-- 3D Interactive Centerpiece Column -->
+        <div class="hero-3d-col">
+          <div class="hero-3d-card">
+            <!-- 3D WebGL Canvas Container -->
+            <div id="hero-3d-canvas" class="canvas-3d-wrapper"></div>
+
+            <!-- Floating 3D Micro-Badges -->
+            <div class="floating-badge badge-top-right">
+              <span class="badge-icon">🧀</span>
+              <div class="badge-info">
+                <strong>Double Cheddar</strong>
+                <span>Melting Lava</span>
+              </div>
+            </div>
+
+            <div class="floating-badge badge-bottom-left">
+              <span class="badge-icon">🍗</span>
+              <div class="badge-info">
+                <strong>Crispy Patties</strong>
+                <span>100% Handcrafted</span>
+              </div>
+            </div>
+
+            <div class="floating-badge badge-bottom-right">
+              <span class="badge-icon">✨</span>
+              <div class="badge-info">
+                <strong>3D Interactive</strong>
+                <span>Drag to Rotate 360°</span>
+              </div>
+            </div>
+
+            <!-- Hint overlay -->
+            <div class="drag-hint">
+              <i class="fa-solid fa-hand-pointer"></i> Touch or drag to spin burger
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROMOTIONAL DEALS STRIP -->
+    <section class="promo-strip" aria-label="Promotions and Coupons">
+      <div class="promo-container">
+        <div class="promo-card card-red" data-code="KRAFTER50">
+          <div class="promo-icon"><i class="fa-solid fa-fire"></i></div>
+          <div class="promo-details">
+            <div class="promo-title">FLAT 50% OFF</div>
+            <div class="promo-sub">Use Code: <strong>KRAFTER50</strong> (Min ₹299)</div>
+          </div>
+          <button class="promo-apply-btn" onclick="applyPromoQuick('KRAFTER50')">Apply</button>
+        </div>
+
+        <div class="promo-card card-gold" data-code="BYTEBITE">
+          <div class="promo-icon"><i class="fa-solid fa-gift"></i></div>
+          <div class="promo-details">
+            <div class="promo-title">FLAT ₹100 DISCOUNT</div>
+            <div class="promo-sub">Use Code: <strong>BYTEBITE</strong> (Min ₹399)</div>
+          </div>
+          <button class="promo-apply-btn" onclick="applyPromoQuick('BYTEBITE')">Apply</button>
+        </div>
+
+        <div class="promo-card card-teal" data-code="FREEDEL">
+          <div class="promo-icon"><i class="fa-solid fa-motorcycle"></i></div>
+          <div class="promo-details">
+            <div class="promo-title">FREE DELIVERY</div>
+            <div class="promo-sub">Use Code: <strong>FREEDEL</strong> (Min ₹199)</div>
+          </div>
+          <button class="promo-apply-btn" onclick="applyPromoQuick('FREEDEL')">Apply</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN FOOD MENU SECTION -->
+    <section class="menu-section" id="menu-section">
+      <div class="menu-container">
+        <!-- Section Header -->
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <div class="section-eyebrow">SAVOR THE FLAVOR</div>
+            <h2 class="section-heading">Explore Our <span class="highlight-red">Krafter Menu</span></h2>
+          </div>
+
+          <!-- Sort and Filter Controls -->
+          <div class="menu-controls">
+            <div class="sort-wrap">
+              <label for="sort-select"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By:</label>
+              <select id="sort-select" class="custom-select">
+                <option value="popular">Most Popular ⭐</option>
+                <option value="price-asc">Price: Low to High 📈</option>
+                <option value="price-desc">Price: High to Low 📉</option>
+                <option value="rating">Top Rated 🔥</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Horizontal Navigation Bar -->
+        <div class="category-tabs-container">
+          <div class="category-tabs-scroll" id="category-tabs-wrapper">
+            <!-- Dynamically generated category tabs -->
+          </div>
+        </div>
+
+        <!-- Active Filter Indicator & Count -->
+        <div class="filter-status-bar">
+          <div class="results-info">
+            Showing <span id="items-count-display">0</span> items in <span id="active-category-display" class="highlight-text">All Items</span>
+          </div>
+          <div class="filter-chips" id="active-filter-chips">
+            <!-- Active filter chips -->
+          </div>
+        </div>
+
+        <!-- Food Items Grid (Cards with 3D perspective & tilt) -->
+        <div class="food-grid" id="food-grid">
+          <!-- Food item cards will be rendered dynamically by app.js -->
+        </div>
+
+        <!-- No Results Fallback -->
+        <div class="no-results hidden" id="no-results-state">
+          <div class="no-results-icon">🍔🔍</div>
+          <h3>Oops! No delicious items matched your search</h3>
+          <p>Try searching for burgers, chicken, pizzas, shakes, or reset your filters.</p>
+          <button class="btn btn-primary" id="reset-filters-btn">Reset All Filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY CHOOSE CODE KRAFTER'S -->
+    <section class="features-section">
+      <div class="features-container">
+        <div class="feature-box">
+          <div class="feature-icon-circle icon-red">
+            <i class="fa-solid fa-burger"></i>
+          </div>
+          <h3>100% Artisan Patties</h3>
+          <p>Hand-smashed daily, seasoned with our secret 14-spice blend, never frozen.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-circle icon-orange">
+            <i class="fa-solid fa-truck-fast"></i>
+          </div>
+          <h3>Lightning 25-Min Delivery</h3>
+          <p>Insulated thermal carriers ensure piping hot crunch delivered right to your doorstep.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-circle icon-green">
+            <i class="fa-solid fa-certificate"></i>
+          </div>
+          <h3>Gold Standard Hygiene</h3>
+          <p>Sterilized kitchen stations, zero preservatives, 100% certified ingredients.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-circle icon-purple">
+            <i class="fa-solid fa-wallet"></i>
+          </div>
+          <h3>Guaranteed Savings</h3>
+          <p>Enjoy up to 50% discount and combo meal savings every single day.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CART SLIDE-OVER DRAWER -->
+  <aside class="cart-drawer-overlay" id="cart-drawer-overlay">
+    <div class="cart-drawer" id="cart-drawer">
+      <!-- Drawer Header -->
+      <div class="cart-header">
+        <div class="cart-header-title">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span>Your Krafter Cart</span>
+          <span class="cart-items-tag" id="drawer-items-count">0 items</span>
+        </div>
+        <button class="cart-close-btn" id="cart-close-btn" aria-label="Close Cart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Free Delivery Progress Bar -->
+      <div class="delivery-progress-wrap" id="delivery-progress-wrap">
+        <div class="progress-info">
+          <span id="delivery-progress-text">Add items worth ₹499 for <strong>FREE Delivery!</strong></span>
+          <span id="delivery-progress-icon">🛵</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="delivery-progress-bar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Cart Items Body -->
+      <div class="cart-body" id="cart-body">
+        <!-- Rendered dynamically -->
+        <div class="cart-empty-state" id="cart-empty-state">
+          <div class="empty-cart-animation">🍟</div>
+          <h3>Your cart is feeling hungry!</h3>
+          <p>Explore our menu and add juicy burgers, crispy chicken, or chilled shakes.</p>
+          <button class="btn btn-primary" onclick="closeCartAndScroll()">Explore Menu</button>
+        </div>
+        <div class="cart-items-list" id="cart-items-list">
+          <!-- Items injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Cart Drawer Footer (Only visible when items in cart) -->
+      <div class="cart-footer hidden" id="cart-footer">
+        <!-- Promo Coupon Input -->
+        <div class="coupon-section">
+          <div class="coupon-input-group">
+            <i class="fa-solid fa-ticket coupon-icon"></i>
+            <input type="text" id="coupon-input" placeholder="Enter coupon (e.g. KRAFTER50)" autocomplete="off">
+            <button id="apply-coupon-btn" class="coupon-btn">Apply</button>
+          </div>
+          <div class="coupon-message" id="coupon-message"></div>
+          <div class="quick-coupons">
+            <span class="quick-chip" onclick="applyPromoInput('KRAFTER50')">⚡ KRAFTER50</span>
+            <span class="quick-chip" onclick="applyPromoInput('BYTEBITE')">🎁 BYTEBITE</span>
+            <span class="quick-chip" onclick="applyPromoInput('FREEDEL')">🛵 FREEDEL</span>
+          </div>
+        </div>
+
+        <!-- Detailed Price Breakdown -->
+        <div class="price-breakdown-card">
+          <div class="breakdown-title">
+            <span>Bill Details</span>
+            <span class="tax-tag">Includes 5% Fast Food GST</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Item Total (Original MRP)</span>
+            <span id="bill-original-subtotal" class="strikethrough">₹0</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Menu Discounted Subtotal</span>
+            <span id="bill-subtotal" class="bold">₹0</span>
+          </div>
+
+          <div class="breakdown-row text-discount" id="coupon-discount-row">
+            <span>Coupon Discount</span>
+            <span id="bill-coupon-discount">-₹0</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Delivery Fee</span>
+            <span id="bill-delivery-fee">₹40</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Restaurant Packaging &amp; Eco Fee</span>
+            <span id="bill-packaging-fee">₹25</span>
+          </div>
+
+          <div class="breakdown-row">
+            <span>Statutory Fast Food GST (5%)</span>
+            <span id="bill-gst">₹0</span>
+          </div>
+
+          <!-- Total Amount Saved Banner -->
+          <div class="savings-banner" id="savings-banner">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Yay! You saved <strong id="bill-total-saved">₹0</strong> on this feast!</span>
+          </div>
+
+          <!-- Grand Total Row -->
+          <div class="breakdown-divider"></div>
+          <div class="breakdown-row grand-total-row">
+            <div>
+              <div class="grand-total-label">Grand Total</div>
+              <div class="grand-total-sub">Inclusive of all taxes &amp; charges</div>
+            </div>
+            <div class="grand-total-amount" id="bill-grand-total">₹0</div>
+          </div>
+        </div>
+
+        <!-- Mode of Payment Selector -->
+        <div class="payment-method-selector">
+          <div class="selector-title">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <span>Select Payment Mode</span>
+          </div>
+          <div class="payment-options-grid">
+            <label class="payment-option selected" data-method="upi">
+              <input type="radio" name="payment-mode" value="upi" checked>
+              <div class="payment-card-inner">
+                <i class="fa-solid fa-qrcode payment-icon icon-upi"></i>
+                <div class="payment-text">
+                  <span class="pay-name">Instant UPI / QR</span>
+                  <span class="pay-sub">GPay, PhonePe, Paytm</span>
+                </div>
+                <div class="pay-radio-circle"></div>
+              </div>
+            </label>
+
+            <label class="payment-option" data-method="card">
+              <input type="radio" name="payment-mode" value="card">
+              <div class="payment-card-inner">
+                <i class="fa-solid fa-credit-card payment-icon icon-card"></i>
+                <div class="payment-text">
+                  <span class="pay-name">Credit / Debit Card</span>
+                  <span class="pay-sub">Visa, Mastercard, RuPay</span>
+                </div>
+                <div class="pay-radio-circle"></div>
+              </div>
+            </label>
+
+            <label class="payment-option" data-method="cod">
+              <input type="radio" name="payment-mode" value="cod">
+              <div class="payment-card-inner">
+                <i class="fa-solid fa-hand-holding-dollar payment-icon icon-cod"></i>
+                <div class="payment-text">
+                  <span class="pay-name">Cash on Delivery</span>
+                  <span class="pay-sub">Pay cash/UPI at doorstep</span>
+                </div>
+                <div class="pay-radio-circle"></div>
+              </div>
+            </label>
+
+            <label class="payment-option" data-method="wallet">
+              <input type="radio" name="payment-mode" value="wallet">
+              <div class="payment-card-inner">
+                <i class="fa-solid fa-wallet payment-icon icon-wallet"></i>
+                <div class="payment-text">
+                  <span class="pay-name">Net Banking &amp; Wallets</span>
+                  <span class="pay-sub">Paytm, Mobikwik, NetBank</span>
+                </div>
+                <div class="pay-radio-circle"></div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Checkout Action Button -->
+        <button id="proceed-checkout-btn" class="btn btn-primary btn-checkout">
+          <span>Proceed to Checkout</span>
+          <span class="checkout-btn-total" id="checkout-btn-price">₹0</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CHECKOUT DETAILS MODAL -->
+  <div class="modal-overlay hidden" id="checkout-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-location-dot"></i>
+          <span>Delivery &amp; Customer Details</span>
+        </div>
+        <button class="modal-close-btn" id="close-checkout-modal-btn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="checkout-form" class="checkout-form" onsubmit="handlePlaceOrder(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cust-name">Full Name *</label>
+            <input type="text" id="cust-name" required placeholder="e.g. Alex Morgan">
+          </div>
+          <div class="form-group">
+            <label for="cust-phone">Phone Number *</label>
+            <input type="tel" id="cust-phone" required placeholder="e.g. +91 98765 43210" pattern="[0-9+ -]{10,14}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cust-address">Delivery Address *</label>
+          <textarea id="cust-address" rows="3" required placeholder="House/Flat No, Building, Street, Landmark, Pincode..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="cust-instructions">Cooking / Delivery Instructions (Optional)</label>
+          <input type="text" id="cust-instructions" placeholder="e.g. Extra spicy, don't ring the doorbell, call on arrival">
+        </div>
+
+        <!-- Order Summary Pill inside Checkout -->
+        <div class="checkout-summary-box">
+          <div class="summary-line">
+            <span>Payment Method:</span>
+            <strong id="checkout-selected-payment" class="highlight-text">Instant UPI / QR</strong>
+          </div>
+          <div class="summary-line">
+            <span>Total Payable Amount:</span>
+            <strong id="checkout-modal-total" class="highlight-total">₹0</strong>
+          </div>
+          <div class="summary-line text-green">
+            <span>Total Savings:</span>
+            <strong id="checkout-modal-savings">₹0</strong>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-glow">
+          <i class="fa-solid fa-lock"></i>
+          <span>Place Order with Code Krafter's</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ORDER SUCCESS CELEBRATION MODAL -->
+  <div class="modal-overlay hidden" id="order-success-modal">
+    <div class="modal-card order-success-card">
+      <!-- Confetti Canvas -->
+      <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+      <div class="success-animation-wrap">
+        <div class="success-check-circle">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <div class="pulse-ring"></div>
+      </div>
+
+      <div class="success-badge">ORDER CONFIRMED! 🎉</div>
+      <h2 class="success-title">Thank You for Krafter's Order!</h2>
+      <p class="success-subtitle">Our chefs have fired up the grills. Your delicious hot meal is being prepared!</p>
+
+      <div class="order-receipt-box">
+        <div class="receipt-row">
+          <span>Order ID:</span>
+          <strong id="success-order-id" class="code-id">#CK-84920</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Estimated Delivery:</span>
+          <strong class="highlight-green"><i class="fa-solid fa-stopwatch"></i> 25 - 30 Minutes</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Payment Selected:</span>
+          <strong id="success-payment-method">Instant UPI / QR</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Amount Paid / Due:</span>
+          <strong id="success-total-amount" class="highlight-red">₹0</strong>
+        </div>
+        <div class="receipt-row text-green">
+          <span>Total Savings Enjoyed:</span>
+          <strong id="success-total-savings">₹0</strong>
+        </div>
+      </div>
+
+      <!-- Live Order Tracker Simulation -->
+      <div class="live-tracker">
+        <div class="tracker-step active">
+          <div class="step-icon"><i class="fa-solid fa-receipt"></i></div>
+          <span>Confirmed</span>
+        </div>
+        <div class="tracker-line active"></div>
+        <div class="tracker-step active">
+          <div class="step-icon"><i class="fa-solid fa-fire-burner"></i></div>
+          <span>Kitchen</span>
+        </div>
+        <div class="tracker-line"></div>
+        <div class="tracker-step">
+          <div class="step-icon"><i class="fa-solid fa-motorcycle"></i></div>
+          <span>On The Way</span>
+        </div>
+        <div class="tracker-line"></div>
+        <div class="tracker-step">
+          <div class="step-icon"><i class="fa-solid fa-house-chimney"></i></div>
+          <span>Delivered</span>
+        </div>
+      </div>
+
+      <div class="success-actions">
+        <button class="btn btn-primary" onclick="closeSuccessModalAndReset()">
+          <i class="fa-solid fa-burger"></i>
+          <span>Order More Delicious Bites</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING QUICK CART PILL (MOBILE) -->
+  <div class="floating-mobile-cart hidden" id="floating-mobile-cart" onclick="cart.notify(); openCartDrawer()">
+    <div class="float-cart-left">
+      <div class="float-badge" id="float-cart-count">0 items</div>
+      <div class="float-price" id="float-cart-total">₹0</div>
+    </div>
+    <div class="float-cart-right">
+      <span>View Cart</span>
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-col brand-col">
+        <div class="footer-logo">
+          <span class="emoji-logo">🍔</span>
+          <span class="brand-name">Code Krafter's</span>
+        </div>
+        <p class="footer-desc">
+          Crafting the juiciest smash burgers, crispiest fried chicken, loaded fries, and rich thickshakes with 3D love.
+        </p>
+        <div class="social-links">
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Food Categories</h4>
+        <ul>
+          <li><a href="#menu-section" onclick="filterByCategory('burgers')">🍔 Krafter Burgers</a></li>
+          <li><a href="#menu-section" onclick="filterByCategory('chicken')">🍗 Crispy Chicken</a></li>
+          <li><a href="#menu-section" onclick="filterByCategory('pizzas')">🍕 Craft Pan Pizzas</a></li>
+          <li><a href="#menu-section" onclick="filterByCategory('sides')">🍟 Loaded Fries &amp; Sides</a></li>
+          <li><a href="#menu-section" onclick="filterByCategory('beverages')">🥤 Shakes &amp; Floats</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home Banner</a></li>
+          <li><a href="#menu-section">Full Menu</a></li>
+          <li><a href="javascript:void(0)" onclick="openCartDrawer()">My Food Cart</a></li>
+          <li><a href="javascript:void(0)" onclick="applyPromoQuick('KRAFTER50')">Deals &amp; Coupons</a></li>
+          <li><a href="#">Privacy Policy &amp; Terms</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Krafter Headquarters</h4>
+        <p><i class="fa-solid fa-location-dot"></i> SRMIST Ramapuram, Bharathi Salai, Ramapuram, Chennai</p>
+        <p><i class="fa-solid fa-phone"></i> +91 81221 82931</p>
+        <p><i class="fa-solid fa-clock"></i> Open: 08:00 A.M. - 03:00 A.M.</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p>© 2026 Code Krafter's Fast Food &amp; Beverages. All Rights Reserved. Built with HTML, CSS &amp; JavaScript.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- 1. Three.js for 3D Hero Centerpiece -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- 2. Canvas Confetti for Order Success Celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <!-- 3. Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/three-scene.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
